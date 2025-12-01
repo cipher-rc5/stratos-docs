@@ -1,0 +1,310 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* <CHANGE> Adding Tektur font for Stratos branding */
+@font-face {
+  font-family: "Tektur";
+  src: url("/fonts/Tektur-VariableFont_wdth,wght.ttf") format("truetype-variations");
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.81 0.1 252);
+  --chart-2: oklch(0.62 0.19 260);
+  --chart-3: oklch(0.55 0.22 263);
+  --chart-4: oklch(0.49 0.22 264);
+  --chart-5: oklch(0.42 0.18 266);
+  --radius: 0.25rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --shadow-x: 0px;
+  --shadow-y: 1px;
+  --shadow-blur: 2px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.05;
+  --shadow-color: #000000;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.269 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #dcd808;
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.371 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.275 0 0);
+  --input: oklch(0.325 0 0);
+  --ring: oklch(0.556 0 0);
+  --chart-1: #d3530f;
+  --chart-2: #f5e003;
+  --chart-3: oklch(0.55 0.22 263);
+  --chart-4: oklch(0.49 0.22 264);
+  --chart-5: oklch(0.42 0.18 266);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.275 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+  --shadow-x: 0px;
+  --shadow-y: 1px;
+  --shadow-blur: 2px;
+  --shadow-spread: 0px;
+  --shadow-opacity: 0.05;
+  --shadow-color: #000000;
+}
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-tektur: "Tektur", "Geist", "Geist Fallback";
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-serif: "Source Serif 4", "Source Serif 4 Fallback";
+  /* computed shadow variables below - do not modify */
+  --shadow-2xs: var(--shadow-x) var(--shadow-y)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-xs: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-sm: var(--shadow-x) var(--shadow-y) calc(var(--shadow-blur) * 1.5) var(--shadow-spread)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-md: calc(var(--shadow-x) * 2) calc(var(--shadow-y) * 2) calc(var(--shadow-blur) * 3)
+    calc(var(--shadow-spread) - 1px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-lg: calc(var(--shadow-x) * 4) calc(var(--shadow-y) * 4) calc(var(--shadow-blur) * 5)
+    calc(var(--shadow-spread) - 3px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-xl: calc(var(--shadow-x) * 6) calc(var(--shadow-y) * 6) calc(var(--shadow-blur) * 7)
+    calc(var(--shadow-spread) - 5px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
+  --shadow-2xl: calc(var(--shadow-x) * 8) calc(var(--shadow-y) * 8) calc(max(0px, var(--shadow-blur) * 9 - 8px))
+    calc(var(--shadow-spread) - 12px)
+    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 250%), transparent);
+  --shadow: var(--shadow-md);
+  --color-shadow-color: var(--shadow-color);
+  --shadow-opacity: var(--shadow-opacity);
+  --shadow-spread: var(--shadow-spread);
+  --shadow-blur: var(--shadow-blur);
+  --shadow-y: var(--shadow-y);
+  --shadow-x: var(--shadow-x);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* <CHANGE> Scalar Acid & Bone Theme - Stratos Custom Colors */
+/* Theme: Acid & Bone - Based on Stratos brand palette */
+:root {
+  --scalar-header-height: 50px;
+  --scalar-sidebar-width: 280px;
+  --scalar-container-width: 680px;
+  --scalar-toc-width: 280px;
+  --scalar-card-icon-width: 40px;
+  --scalar-card-icon-height: 40px;
+  --scalar-card-icon-diameter: 20px;
+  --scalar-card-padding: 16px;
+  --scalar-card-inter-element-gap: 4px;
+  --scalar-toc-indent-unit: 16px;
+  --scalar-row-gap: 16px;
+  --scalar-extra-bold: 700;
+  --scalar-heading-spacing: 44px;
+  --scalar-block-spacing: 12px;
+  --scalar-font-size-1: 24px;
+  /* Shared Text Decoration */
+  --scalar-text-decoration: none;
+  --scalar-text-decoration-hover: underline;
+  /* Square Edges */
+  --scalar-radius: 0px;
+  --scalar-radius-lg: 0px;
+  --scalar-radius-xl: 0px;
+}
+
+/* Light Mode: Cream Background, Black Text */
+.light-mode {
+  /* Backgrounds: Cream Palette */
+  --scalar-background-1: #f2efe9; /* Main Cream */
+  --scalar-background-2: #e8e5de; /* Slightly Darker Cream for Sidebar */
+  --scalar-background-3: #dbd8d0; /* Borders/Deep elements */
+  --scalar-background-accent: rgba(220, 238, 36, 0.15); /* Low opacity Lime */
+  /* Text: Charcoal Palette */
+  --scalar-color-1: #141414; /* Primary Text */
+  --scalar-color-2: #454545; /* Secondary Text */
+  --scalar-color-3: #787878; /* Tertiary Text */
+  /* Accents */
+  --scalar-color-accent: #141414; /* Keep links black in light mode for contrast */
+  --scalar-border-color: #dbd8d0;
+  /* Buttons: Black button with Lime text (Matches bottom left image style) */
+  --scalar-button-1: #141414;
+  --scalar-button-1-hover: #000000;
+  --scalar-button-1-color: #dcee24; /* Lime Text */
+}
+
+/* Dark Mode: Charcoal Background, Lime/Cream Text */
+.dark-mode {
+  /* Backgrounds: Charcoal Palette */
+  --scalar-background-1: #141414; /* Main Dark */
+  --scalar-background-2: #1f1f1f; /* Sidebar Dark */
+  --scalar-background-3: #2a2a2a; /* Card Dark */
+  /* Text: Cream/Grey Palette */
+  --scalar-color-1: #f2efe9; /* Primary Text (Cream) */
+  --scalar-color-2: #a1a1a1; /* Secondary Text */
+  --scalar-color-3: #666666; /* Tertiary Text */
+  /* Accents: Acid Lime */
+  --scalar-color-accent: #dcee24; /* Lime for links/highlights */
+  --scalar-background-accent: rgba(220, 238, 36, 0.15);
+  --scalar-border-color: #2a2a2a;
+  /* Buttons: Lime button with Black text (Matches bottom right image style) */
+  --scalar-button-1: #dcee24;
+  --scalar-button-1-hover: #c9db1f;
+  --scalar-button-1-color: #141414;
+}
+
+/* Sidebar Specifics */
+.light-mode .t-doc__sidebar,
+.dark-mode .t-doc__sidebar {
+  --scalar-sidebar-background-1: var(--scalar-background-2);
+  --scalar-sidebar-color-1: var(--scalar-color-1);
+  --scalar-sidebar-color-2: var(--scalar-color-2);
+  --scalar-sidebar-border-color: var(--scalar-border-color);
+  --scalar-sidebar-item-hover-background: var(--scalar-background-3);
+  --scalar-sidebar-item-hover-color: currentColor;
+  --scalar-sidebar-item-active-background: var(--scalar-background-1); /* Active item cuts out to main bg color */
+  --scalar-sidebar-color-active: var(--scalar-color-1);
+  --scalar-sidebar-indent-border: var(--scalar-sidebar-border-color);
+  --scalar-sidebar-indent-border-hover: var(--scalar-sidebar-border-color);
+  --scalar-sidebar-indent-border-active: var(--scalar-color-accent);
+  --scalar-sidebar-search-background: var(--scalar-background-1);
+  --scalar-sidebar-search-color: var(--scalar-color-1);
+  --scalar-sidebar-search-border-color: var(--scalar-border-color);
+}
+
+/* Advanced / Status Colors */
+.light-mode {
+  --scalar-color-green: #2fa86d;
+  --scalar-color-red: #d92b2b;
+  --scalar-color-yellow: #e6b800;
+  --scalar-color-blue: #2b7dd9;
+  --scalar-color-orange: #e66a00;
+  --scalar-color-purple: #7a2bd9;
+  --scalar-link-color: var(--scalar-color-1);
+  --scalar-link-color-hover: #dcee24; /* Hover link turns lime */
+  /* Tooltips */
+  --scalar-tooltip-background: #141414;
+  --scalar-tooltip-color: #dcee24;
+}
+
+.dark-mode {
+  --scalar-color-green: #dcee24; /* Re-using Lime for success/green if appropriate, or keep distinct */
+  --scalar-color-red: #ff4d4d;
+  --scalar-color-yellow: #ffd633;
+  --scalar-color-blue: #4da6ff;
+  --scalar-color-orange: #ff944d;
+  --scalar-color-purple: #b366ff;
+  --scalar-link-color: var(--scalar-color-accent);
+  --scalar-link-color-hover: #fff;
+  /* Tooltips */
+  --scalar-tooltip-background: #f2efe9;
+  --scalar-tooltip-color: #141414;
+}
+
+/* Document Header */
+.light-mode .t-doc__header,
+.dark-mode .t-doc__header {
+  --scalar-header-background-1: var(--scalar-background-1);
+  --scalar-header-border-color: var(--scalar-border-color);
+  --scalar-header-color-1: var(--scalar-color-1);
+  --scalar-header-color-2: var(--scalar-color-2);
+  --scalar-header-background-toggle: var(--scalar-background-3);
+  --scalar-header-call-to-action-color: var(--scalar-button-1-color);
+}
+
+/* Headings and Spacing Overrides */
+.info-section,
+.t-doc__section:first-child {
+  padding-top: 60px;
+}
+
+.font-tektur {
+  font-family: "Tektur", "Geist", sans-serif;
+}
