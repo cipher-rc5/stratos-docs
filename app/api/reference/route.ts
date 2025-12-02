@@ -1,12 +1,12 @@
-import { ApiReference } from "@scalar/nextjs-api-reference"
+import { ApiReference } from '@scalar/nextjs-api-reference';
 
 const config = {
   spec: {
     content: {
-      openapi: "3.1.0",
+      openapi: '3.1.0',
       info: {
-        title: "Stratos DeFi Strategy Marketplace API",
-        version: "1.0.0",
+        title: 'Stratos DeFi Strategy Marketplace API',
+        version: '0.2.0',
         description: `# Stratos API: The Decentralized Strategy Layer
 
 Decentralized marketplace infrastructure for the creation, discovery, and monetization of DeFi intelligence.
@@ -37,709 +37,443 @@ Stratos facilitates a composable creator economy where trading strategies are tr
 ## Developer Resources
 
 - **Interactive Docs**: Full OpenAPI specifications powered by Scalar.
-- **Endpoint**: \`https://api.stratos.markets/docs\``,
+- **Endpoint**: \`https://api.stratos.markets/docs\``
       },
-      servers: [
-        {
-          url: "https://api.stratos.markets/v1",
-          description: "Production server",
-        },
-      ],
+      servers: [{ url: 'https://api.stratos.markets/v1', description: 'Production server' }],
       paths: {
-        "/strategies": {
+        '/strategies': {
           get: {
-            summary: "List strategies",
-            description: "Retrieve a paginated list of all published trading strategies",
-            tags: ["Strategies"],
-            parameters: [
-              {
-                name: "page",
-                in: "query",
-                schema: { type: "integer", default: 1 },
-                description: "Page number",
-              },
-              {
-                name: "limit",
-                in: "query",
-                schema: { type: "integer", default: 20, maximum: 100 },
-                description: "Items per page",
-              },
-              {
-                name: "sort",
-                in: "query",
-                schema: { type: "string", enum: ["performance", "popularity", "recent"] },
-                description: "Sort order",
-              },
-            ],
+            summary: 'List strategies',
+            description: 'Retrieve a paginated list of all published trading strategies',
+            tags: ['Strategies'],
+            parameters: [{ name: 'page', in: 'query', schema: { type: 'integer', default: 1 }, description: 'Page number' }, {
+              name: 'limit',
+              in: 'query',
+              schema: { type: 'integer', default: 20, maximum: 100 },
+              description: 'Items per page'
+            }, {
+              name: 'sort',
+              in: 'query',
+              schema: { type: 'string', enum: ['performance', 'popularity', 'recent'] },
+              description: 'Sort order'
+            }],
             responses: {
-              "200": {
-                description: "Successful response",
+              '200': {
+                description: 'Successful response',
                 content: {
-                  "application/json": {
+                  'application/json': {
                     schema: {
-                      type: "object",
+                      type: 'object',
                       properties: {
-                        strategies: {
-                          type: "array",
-                          items: { $ref: "#/components/schemas/Strategy" },
-                        },
-                        pagination: { $ref: "#/components/schemas/Pagination" },
-                      },
-                    },
-                  },
-                },
-              },
-            },
+                        strategies: { type: 'array', items: { $ref: '#/components/schemas/Strategy' } },
+                        pagination: { $ref: '#/components/schemas/Pagination' }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           post: {
-            summary: "Create strategy",
-            description: "Publish a new trading strategy to the marketplace",
-            tags: ["Strategies"],
+            summary: 'Create strategy',
+            description: 'Publish a new trading strategy to the marketplace',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
             requestBody: {
               required: true,
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/CreateStrategyRequest" },
-                },
-              },
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/CreateStrategyRequest' } } }
             },
             responses: {
-              "201": {
-                description: "Strategy created successfully",
-                content: {
-                  "application/json": {
-                    schema: { $ref: "#/components/schemas/Strategy" },
-                  },
-                },
-              },
-            },
-          },
+              '201': {
+                description: 'Strategy created successfully',
+                content: { 'application/json': { schema: { $ref: '#/components/schemas/Strategy' } } }
+              }
+            }
+          }
         },
-        "/strategies/{strategyId}": {
+        '/strategies/{strategyId}': {
           get: {
-            summary: "Get strategy",
-            description: "Retrieve detailed information about a specific strategy",
-            tags: ["Strategies"],
-            parameters: [
-              {
-                name: "strategyId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-                description: "Strategy ID",
-              },
-            ],
+            summary: 'Get strategy',
+            description: 'Retrieve detailed information about a specific strategy',
+            tags: ['Strategies'],
+            parameters: [{ name: 'strategyId', in: 'path', required: true, schema: { type: 'string' }, description: 'Strategy ID' }],
             responses: {
-              "200": {
-                description: "Successful response",
-                content: {
-                  "application/json": {
-                    schema: { $ref: "#/components/schemas/Strategy" },
-                  },
-                },
-              },
-            },
+              '200': {
+                description: 'Successful response',
+                content: { 'application/json': { schema: { $ref: '#/components/schemas/Strategy' } } }
+              }
+            }
           },
           put: {
-            summary: "Update strategy",
-            description: "Update an existing strategy",
-            tags: ["Strategies"],
+            summary: 'Update strategy',
+            description: 'Update an existing strategy',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "strategyId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
+            parameters: [{ name: 'strategyId', in: 'path', required: true, schema: { type: 'string' } }],
             requestBody: {
               required: true,
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/UpdateStrategyRequest" },
-                },
-              },
+              content: { 'application/json': { schema: { $ref: '#/components/schemas/UpdateStrategyRequest' } } }
             },
             responses: {
-              "200": {
-                description: "Strategy updated",
-                content: {
-                  "application/json": {
-                    schema: { $ref: "#/components/schemas/Strategy" },
-                  },
-                },
-              },
-            },
+              '200': {
+                description: 'Strategy updated',
+                content: { 'application/json': { schema: { $ref: '#/components/schemas/Strategy' } } }
+              }
+            }
           },
           delete: {
-            summary: "Delete strategy",
-            description: "Remove a strategy from the marketplace",
-            tags: ["Strategies"],
+            summary: 'Delete strategy',
+            description: 'Remove a strategy from the marketplace',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "strategyId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
-            responses: {
-              "204": {
-                description: "Strategy deleted successfully",
-              },
-            },
-          },
+            parameters: [{ name: 'strategyId', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { '204': { description: 'Strategy deleted successfully' } }
+          }
         },
-        "/strategies/{strategyId}/fork": {
+        '/strategies/{strategyId}/fork': {
           post: {
-            summary: "Fork strategy",
-            description: "Create a new strategy based on an existing one",
-            tags: ["Strategies"],
+            summary: 'Fork strategy',
+            description: 'Create a new strategy based on an existing one',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "strategyId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
+            parameters: [{ name: 'strategyId', in: 'path', required: true, schema: { type: 'string' } }],
             requestBody: {
               content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                    properties: {
-                      name: { type: "string" },
-                      modifications: { type: "string" },
-                    },
-                  },
-                },
-              },
+                'application/json': {
+                  schema: { type: 'object', properties: { name: { type: 'string' }, modifications: { type: 'string' } } }
+                }
+              }
             },
             responses: {
-              "201": {
-                description: "Strategy forked",
-                content: {
-                  "application/json": {
-                    schema: { $ref: "#/components/schemas/Strategy" },
-                  },
-                },
-              },
-            },
-          },
+              '201': {
+                description: 'Strategy forked',
+                content: { 'application/json': { schema: { $ref: '#/components/schemas/Strategy' } } }
+              }
+            }
+          }
         },
-        "/strategies/{strategyId}/publish": {
+        '/strategies/{strategyId}/publish': {
           post: {
-            summary: "Publish strategy to marketplace",
-            description: "Make a strategy publicly available",
-            tags: ["Strategies"],
+            summary: 'Publish strategy to marketplace',
+            description: 'Make a strategy publicly available',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "strategyId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
-            responses: {
-              "200": {
-                description: "Strategy published",
-              },
-            },
-          },
+            parameters: [{ name: 'strategyId', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { '200': { description: 'Strategy published' } }
+          }
         },
-        "/strategies/{strategyId}/validate": {
+        '/strategies/{strategyId}/validate': {
           post: {
-            summary: "Validate strategy",
-            description: "Run validation checks on strategy code",
-            tags: ["Strategies"],
+            summary: 'Validate strategy',
+            description: 'Run validation checks on strategy code',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "strategyId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
+            parameters: [{ name: 'strategyId', in: 'path', required: true, schema: { type: 'string' } }],
             responses: {
-              "200": {
-                description: "Validation results",
+              '200': {
+                description: 'Validation results',
                 content: {
-                  "application/json": {
+                  'application/json': {
                     schema: {
-                      type: "object",
-                      properties: {
-                        valid: { type: "boolean" },
-                        errors: { type: "array", items: { type: "string" } },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
+                      type: 'object',
+                      properties: { valid: { type: 'boolean' }, errors: { type: 'array', items: { type: 'string' } } }
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
-        "/strategies/instantiate/{templateId}": {
+        '/strategies/instantiate/{templateId}': {
           post: {
-            summary: "Instantiate template",
-            description: "Create a strategy from a template",
-            tags: ["Strategies"],
+            summary: 'Instantiate template',
+            description: 'Create a strategy from a template',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "templateId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
+            parameters: [{ name: 'templateId', in: 'path', required: true, schema: { type: 'string' } }],
             requestBody: {
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                    properties: {
-                      parameters: { type: "object" },
-                    },
-                  },
-                },
-              },
+              content: { 'application/json': { schema: { type: 'object', properties: { parameters: { type: 'object' } } } } }
             },
-            responses: {
-              "201": {
-                description: "Strategy created from template",
-              },
-            },
-          },
+            responses: { '201': { description: 'Strategy created from template' } }
+          }
         },
-        "/strategies/user/purchased": {
+        '/strategies/user/purchased': {
           get: {
             summary: "Get user's purchased strategies",
-            description: "List all strategies purchased by the authenticated user",
-            tags: ["Strategies"],
+            description: 'List all strategies purchased by the authenticated user',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
             responses: {
-              "200": {
-                description: "Purchased strategies",
-                content: {
-                  "application/json": {
-                    schema: {
-                      type: "array",
-                      items: { $ref: "#/components/schemas/Strategy" },
-                    },
-                  },
-                },
-              },
-            },
-          },
+              '200': {
+                description: 'Purchased strategies',
+                content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Strategy' } } } }
+              }
+            }
+          }
         },
-        "/strategies/{strategyId}/unpublish": {
+        '/strategies/{strategyId}/unpublish': {
           post: {
-            summary: "Unpublish strategy",
-            description: "Remove strategy from marketplace",
-            tags: ["Strategies"],
+            summary: 'Unpublish strategy',
+            description: 'Remove strategy from marketplace',
+            tags: ['Strategies'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "strategyId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
-            responses: {
-              "200": {
-                description: "Strategy unpublished",
-              },
-            },
-          },
+            parameters: [{ name: 'strategyId', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { '200': { description: 'Strategy unpublished' } }
+          }
         },
-        "/templates": {
+        '/templates': {
           get: {
-            summary: "List strategy templates",
-            description: "Get all available strategy templates",
-            tags: ["Templates"],
+            summary: 'List strategy templates',
+            description: 'Get all available strategy templates',
+            tags: ['Templates'],
             responses: {
-              "200": {
-                description: "Template list",
-                content: {
-                  "application/json": {
-                    schema: {
-                      type: "array",
-                      items: { $ref: "#/components/schemas/Template" },
-                    },
-                  },
-                },
-              },
-            },
+              '200': {
+                description: 'Template list',
+                content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Template' } } } }
+              }
+            }
           },
           post: {
-            summary: "Create strategy template",
-            description: "Publish a new template",
-            tags: ["Templates"],
+            summary: 'Create strategy template',
+            description: 'Publish a new template',
+            tags: ['Templates'],
             security: [{ BearerAuth: [] }],
-            requestBody: {
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/CreateTemplateRequest" },
-                },
-              },
-            },
-            responses: {
-              "201": {
-                description: "Template created",
-              },
-            },
-          },
+            requestBody: { content: { 'application/json': { schema: { $ref: '#/components/schemas/CreateTemplateRequest' } } } },
+            responses: { '201': { description: 'Template created' } }
+          }
         },
-        "/templates/{templateId}": {
+        '/templates/{templateId}': {
           get: {
-            summary: "Get template details",
-            description: "Retrieve information about a specific template",
-            tags: ["Templates"],
-            parameters: [
-              {
-                name: "templateId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
+            summary: 'Get template details',
+            description: 'Retrieve information about a specific template',
+            tags: ['Templates'],
+            parameters: [{ name: 'templateId', in: 'path', required: true, schema: { type: 'string' } }],
             responses: {
-              "200": {
-                description: "Template details",
-                content: {
-                  "application/json": {
-                    schema: { $ref: "#/components/schemas/Template" },
-                  },
-                },
-              },
-            },
+              '200': {
+                description: 'Template details',
+                content: { 'application/json': { schema: { $ref: '#/components/schemas/Template' } } }
+              }
+            }
           },
           put: {
-            summary: "Update template",
-            description: "Modify an existing template",
-            tags: ["Templates"],
+            summary: 'Update template',
+            description: 'Modify an existing template',
+            tags: ['Templates'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "templateId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
-            responses: {
-              "200": {
-                description: "Template updated",
-              },
-            },
+            parameters: [{ name: 'templateId', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { '200': { description: 'Template updated' } }
           },
           delete: {
-            summary: "Delete template",
-            description: "Remove a template",
-            tags: ["Templates"],
+            summary: 'Delete template',
+            description: 'Remove a template',
+            tags: ['Templates'],
             security: [{ BearerAuth: [] }],
-            parameters: [
-              {
-                name: "templateId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
-            responses: {
-              "204": {
-                description: "Template deleted",
-              },
-            },
-          },
+            parameters: [{ name: 'templateId', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { '204': { description: 'Template deleted' } }
+          }
         },
-        "/templates/{templateId}/instantiate": {
+        '/templates/{templateId}/instantiate': {
           post: {
-            summary: "Preview template instantiation",
-            description: "Preview what a template would look like with given parameters",
-            tags: ["Templates"],
-            parameters: [
-              {
-                name: "templateId",
-                in: "path",
-                required: true,
-                schema: { type: "string" },
-              },
-            ],
-            responses: {
-              "200": {
-                description: "Preview generated",
-              },
-            },
-          },
+            summary: 'Preview template instantiation',
+            description: 'Preview what a template would look like with given parameters',
+            tags: ['Templates'],
+            parameters: [{ name: 'templateId', in: 'path', required: true, schema: { type: 'string' } }],
+            responses: { '200': { description: 'Preview generated' } }
+          }
         },
-        "/templates/categories": {
+        '/templates/categories': {
           get: {
-            summary: "Get template categories",
-            description: "List all template categories",
-            tags: ["Templates"],
-            responses: {
-              "200": {
-                description: "Categories list",
-              },
-            },
-          },
+            summary: 'Get template categories',
+            description: 'List all template categories',
+            tags: ['Templates'],
+            responses: { '200': { description: 'Categories list' } }
+          }
         },
-        "/templates/featured": {
+        '/templates/featured': {
           get: {
-            summary: "Get featured templates",
-            description: "Retrieve curated featured templates",
-            tags: ["Templates"],
-            responses: {
-              "200": {
-                description: "Featured templates",
-              },
-            },
-          },
+            summary: 'Get featured templates',
+            description: 'Retrieve curated featured templates',
+            tags: ['Templates'],
+            responses: { '200': { description: 'Featured templates' } }
+          }
         },
-        "/marketplace/discover": {
+        '/marketplace/discover': {
           get: {
-            summary: "Discover strategies",
-            description: "Browse marketplace with filters",
-            tags: ["Marketplace"],
-            parameters: [
-              {
-                name: "category",
-                in: "query",
-                schema: { type: "string" },
-              },
-              {
-                name: "chain",
-                in: "query",
-                schema: { type: "string" },
-              },
-            ],
+            summary: 'Discover strategies',
+            description: 'Browse marketplace with filters',
+            tags: ['Marketplace'],
+            parameters: [{ name: 'category', in: 'query', schema: { type: 'string' } }, {
+              name: 'chain',
+              in: 'query',
+              schema: { type: 'string' }
+            }],
             responses: {
-              "200": {
-                description: "Discovery results",
-                content: {
-                  "application/json": {
-                    schema: {
-                      type: "array",
-                      items: { $ref: "#/components/schemas/Strategy" },
-                    },
-                  },
-                },
-              },
-            },
-          },
+              '200': {
+                description: 'Discovery results',
+                content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/Strategy' } } } }
+              }
+            }
+          }
         },
-        "/marketplace/search": {
+        '/marketplace/search': {
           post: {
-            summary: "Search marketplace",
-            description: "Advanced search with filters for performance, risk, and tags",
-            tags: ["Marketplace"],
-            requestBody: {
-              required: true,
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/SearchRequest" },
-                },
-              },
-            },
+            summary: 'Search marketplace',
+            description: 'Advanced search with filters for performance, risk, and tags',
+            tags: ['Marketplace'],
+            requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/SearchRequest' } } } },
             responses: {
-              "200": {
-                description: "Search results",
+              '200': {
+                description: 'Search results',
                 content: {
-                  "application/json": {
+                  'application/json': {
                     schema: {
-                      type: "object",
+                      type: 'object',
                       properties: {
-                        results: {
-                          type: "array",
-                          items: { $ref: "#/components/schemas/Strategy" },
-                        },
-                        total: { type: "integer" },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
+                        results: { type: 'array', items: { $ref: '#/components/schemas/Strategy' } },
+                        total: { type: 'integer' }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
-        "/marketplace/featured": {
+        '/marketplace/featured': {
           get: {
-            summary: "Get featured strategies",
-            description: "Retrieve curated featured strategies",
-            tags: ["Marketplace"],
-            responses: {
-              "200": {
-                description: "Featured strategies",
-              },
-            },
-          },
+            summary: 'Get featured strategies',
+            description: 'Retrieve curated featured strategies',
+            tags: ['Marketplace'],
+            responses: { '200': { description: 'Featured strategies' } }
+          }
         },
-        "/marketplace/trending": {
+        '/marketplace/trending': {
           get: {
-            summary: "Get trending strategies",
-            description: "Most popular strategies by recent activity",
-            tags: ["Marketplace"],
-            responses: {
-              "200": {
-                description: "Trending strategies",
-              },
-            },
-          },
-        },
+            summary: 'Get trending strategies',
+            description: 'Most popular strategies by recent activity',
+            tags: ['Marketplace'],
+            responses: { '200': { description: 'Trending strategies' } }
+          }
+        }
       },
       components: {
         schemas: {
           Strategy: {
-            type: "object",
+            type: 'object',
             properties: {
-              id: { type: "string", example: "strat_abc123" },
-              name: { type: "string", example: "DCA Bitcoin Strategy" },
-              description: { type: "string" },
-              creator: { type: "string", example: "0x1234..." },
-              version: { type: "string", example: "1.2.0" },
+              id: { type: 'string', example: 'strat_abc123' },
+              name: { type: 'string', example: 'DCA Bitcoin Strategy' },
+              description: { type: 'string' },
+              creator: { type: 'string', example: '0x1234...' },
+              version: { type: 'string', example: '1.2.0' },
               performance: {
-                type: "object",
+                type: 'object',
                 properties: {
-                  roi: { type: "number", example: 24.5 },
-                  sharpeRatio: { type: "number", example: 1.8 },
-                  maxDrawdown: { type: "number", example: -12.3 },
-                },
+                  roi: { type: 'number', example: 24.5 },
+                  sharpeRatio: { type: 'number', example: 1.8 },
+                  maxDrawdown: { type: 'number', example: -12.3 }
+                }
               },
               pricing: {
-                type: "object",
+                type: 'object',
                 properties: {
-                  type: { type: "string", enum: ["flat", "streaming", "subscription"] },
-                  amount: { type: "number", example: 100 },
-                  currency: { type: "string", example: "USDC" },
-                },
+                  type: { type: 'string', enum: ['flat', 'streaming', 'subscription'] },
+                  amount: { type: 'number', example: 100 },
+                  currency: { type: 'string', example: 'USDC' }
+                }
               },
-              tags: { type: "array", items: { type: "string" } },
-              subscribers: { type: "integer", example: 342 },
-              createdAt: { type: "string", format: "date-time" },
-            },
+              tags: { type: 'array', items: { type: 'string' } },
+              subscribers: { type: 'integer', example: 342 },
+              createdAt: { type: 'string', format: 'date-time' }
+            }
           },
           CreateStrategyRequest: {
-            type: "object",
-            required: ["name", "code", "pricing"],
+            type: 'object',
+            required: ['name', 'code', 'pricing'],
             properties: {
-              name: { type: "string" },
-              description: { type: "string" },
-              code: { type: "string", description: "Strategy logic code" },
+              name: { type: 'string' },
+              description: { type: 'string' },
+              code: { type: 'string', description: 'Strategy logic code' },
               pricing: {
-                type: "object",
+                type: 'object',
                 properties: {
-                  type: { type: "string", enum: ["flat", "streaming", "subscription"] },
-                  amount: { type: "number" },
-                  currency: { type: "string" },
-                },
+                  type: { type: 'string', enum: ['flat', 'streaming', 'subscription'] },
+                  amount: { type: 'number' },
+                  currency: { type: 'string' }
+                }
               },
-              tags: { type: "array", items: { type: "string" } },
-            },
+              tags: { type: 'array', items: { type: 'string' } }
+            }
           },
           UpdateStrategyRequest: {
-            type: "object",
-            properties: {
-              name: { type: "string" },
-              description: { type: "string" },
-              code: { type: "string" },
-              pricing: { type: "object" },
-            },
+            type: 'object',
+            properties: { name: { type: 'string' }, description: { type: 'string' }, code: { type: 'string' }, pricing: { type: 'object' } }
           },
           Template: {
-            type: "object",
+            type: 'object',
             properties: {
-              id: { type: "string" },
-              name: { type: "string" },
-              description: { type: "string" },
-              category: { type: "string" },
-              parameters: { type: "array", items: { type: "object" } },
-            },
+              id: { type: 'string' },
+              name: { type: 'string' },
+              description: { type: 'string' },
+              category: { type: 'string' },
+              parameters: { type: 'array', items: { type: 'object' } }
+            }
           },
           CreateTemplateRequest: {
-            type: "object",
+            type: 'object',
             properties: {
-              name: { type: "string" },
-              description: { type: "string" },
-              code: { type: "string" },
-              parameters: { type: "array" },
-            },
+              name: { type: 'string' },
+              description: { type: 'string' },
+              code: { type: 'string' },
+              parameters: { type: 'array' }
+            }
           },
           SearchRequest: {
-            type: "object",
+            type: 'object',
             properties: {
-              query: { type: "string" },
+              query: { type: 'string' },
               filters: {
-                type: "object",
+                type: 'object',
                 properties: {
-                  minRoi: { type: "number" },
-                  maxDrawdown: { type: "number" },
-                  tags: { type: "array", items: { type: "string" } },
-                  priceRange: {
-                    type: "object",
-                    properties: {
-                      min: { type: "number" },
-                      max: { type: "number" },
-                    },
-                  },
-                },
-              },
-            },
+                  minRoi: { type: 'number' },
+                  maxDrawdown: { type: 'number' },
+                  tags: { type: 'array', items: { type: 'string' } },
+                  priceRange: { type: 'object', properties: { min: { type: 'number' }, max: { type: 'number' } } }
+                }
+              }
+            }
           },
           CreatorAnalytics: {
-            type: "object",
+            type: 'object',
             properties: {
-              totalRevenue: { type: "number", example: 45000 },
-              activeSubscribers: { type: "integer", example: 234 },
-              churnRate: { type: "number", example: 5.2 },
+              totalRevenue: { type: 'number', example: 45000 },
+              activeSubscribers: { type: 'integer', example: 234 },
+              churnRate: { type: 'number', example: 5.2 },
               topStrategies: {
-                type: "array",
+                type: 'array',
                 items: {
-                  type: "object",
-                  properties: {
-                    strategyId: { type: "string" },
-                    revenue: { type: "number" },
-                    subscribers: { type: "integer" },
-                  },
-                },
-              },
-            },
+                  type: 'object',
+                  properties: { strategyId: { type: 'string' }, revenue: { type: 'number' }, subscribers: { type: 'integer' } }
+                }
+              }
+            }
           },
           Pagination: {
-            type: "object",
-            properties: {
-              page: { type: "integer" },
-              limit: { type: "integer" },
-              total: { type: "integer" },
-              pages: { type: "integer" },
-            },
-          },
+            type: 'object',
+            properties: { page: { type: 'integer' }, limit: { type: 'integer' }, total: { type: 'integer' }, pages: { type: 'integer' } }
+          }
         },
         securitySchemes: {
-          BearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT",
-            description: "JWT token-based authentication for API access",
-          },
-        },
+          BearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', description: 'JWT token-based authentication for API access' }
+        }
       },
-      tags: [
-        { name: "Strategies", description: "Strategy lifecycle operations" },
-        { name: "Templates", description: "Strategy template management" },
-        { name: "Marketplace", description: "Discovery and search" },
-      ],
-    },
+      tags: [{ name: 'Strategies', description: 'Strategy lifecycle operations' }, {
+        name: 'Templates',
+        description: 'Strategy template management'
+      }, { name: 'Marketplace', description: 'Discovery and search' }]
+    }
   },
-  theme: "none",
+  theme: 'none',
   customCss: `
     /* Theme: Acid & Bone - Based on Stratos brand palette */
     :root {
@@ -853,12 +587,12 @@ Stratos facilitates a composable creator economy where trading strategies are tr
       padding-top: 60px;
     }
   `,
-  layout: "modern",
+  layout: 'modern',
   darkMode: true,
   hideModels: false,
   hideDownloadButton: false,
   showSidebar: true,
-  searchHotKey: "k",
-}
+  searchHotKey: 'k'
+};
 
-export const GET = ApiReference(config)
+export const GET = ApiReference(config);
