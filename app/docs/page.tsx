@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { MermaidDiagram } from "@/components/mermaid-diagram"
+import { ZoomableDiagram } from "@/components/zoomable-diagram"
 
 export default function DocsPage() {
   return (
@@ -291,8 +291,11 @@ export default function DocsPage() {
                 standards to ensure maximum interoperability.
               </p>
 
-              <MermaidDiagram
+              {/* Diagram for Technical Architecture */}
+              <ZoomableDiagram
                 id="architecture-diagram"
+                minScale={0.5}
+                maxScale={3}
                 chart={`
 graph TB
     subgraph "Agent Layer"
@@ -401,8 +404,11 @@ graph TB
             <section id="user-journey" className="scroll-mt-8 mb-16">
               <h2 className="text-3xl font-bold text-[#141414] mt-16 mb-6">User Journey (The "Happy Path")</h2>
 
-              <MermaidDiagram
+              {/* Diagram for User Journey */}
+              <ZoomableDiagram
                 id="user-journey-diagram"
+                minScale={0.5}
+                maxScale={3}
                 chart={`
 sequenceDiagram
     participant C as Elena (Creator)
@@ -475,8 +481,11 @@ sequenceDiagram
               <h2 className="text-3xl font-bold text-[#141414] mt-16 mb-6">Technical Roadmap</h2>
               <p className="text-lg font-semibold text-[#141414] mb-6">Engineering the Standards</p>
 
-              <MermaidDiagram
+              {/* Diagram for Technical Roadmap */}
+              <ZoomableDiagram
                 id="technical-roadmap-diagram"
+                minScale={0.5}
+                maxScale={3}
                 chart={`
 gantt
     title Technical Development Timeline
@@ -538,8 +547,11 @@ gantt
               <h2 className="text-3xl font-bold text-[#141414] mt-16 mb-6">Executional Roadmap</h2>
               <p className="text-lg font-semibold text-[#141414] mb-6">Business & Growth</p>
 
-              <MermaidDiagram
+              {/* Diagram for Executional Roadmap */}
+              <ZoomableDiagram
                 id="executional-roadmap-diagram"
+                minScale={0.5}
+                maxScale={3}
                 chart={`
 graph LR
     A[Phase 1: Experimental Alpha<br/>Testnet Only] --> B[Phase 2: Public Beta<br/>Permissionless Mainnet]
@@ -625,8 +637,11 @@ graph LR
                 all frameworks will naturally adopt.
               </p>
 
-              <MermaidDiagram
+              {/* Diagram for Go-To-Market Strategy */}
+              <ZoomableDiagram
                 id="gtm-strategy-diagram"
+                minScale={0.5}
+                maxScale={3}
                 chart={`
 graph TD
     A[Stratos Platform] --> B[Supply Seeding]
