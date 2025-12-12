@@ -143,11 +143,11 @@ export default function DocsPage() {
               <li className='text-[#454545]'>
                 <strong className='text-[#141414]'>Endpoint:</strong>{' '}
                 <a
-                  href='https://api.stratos.markets/docs'
+                  href='https://stratos-markets-api.vercel.app/docs'
                   className='text-[#141414] underline hover:text-[#dcee24] transition-colors'
                   target='_blank'
                   rel='noopener noreferrer'>
-                  https://api.stratos.markets/docs
+                  https://stratos-markets-api.vercel.app/docs
                 </a>
               </li>
             </ul>

@@ -14,7 +14,7 @@ export default function HomePage() {
             <Link href='/docs' className='text-sm font-medium hover:text-[#dcee24] transition-colors'>Documentation</Link>
             <Link href='/api/reference' className='text-sm font-medium hover:text-[#dcee24] transition-colors'>API Reference</Link>
             <a
-              href='https://api.stratos.markets'
+              href='https://stratos-markets-api.vercel.app'
               target='_blank'
               rel='noopener noreferrer'
               className='rounded-none bg-[#dcee24] px-4 py-2 text-sm font-bold text-[#141414] hover:bg-[#c9db1f] transition-colors'>

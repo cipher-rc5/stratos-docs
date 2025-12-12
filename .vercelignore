@@ -1,0 +1,31 @@
+# Development and documentation files
+_dev
+
+# Git and version control
+.git
+.gitignore
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+.cursor
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Development dependencies and cache
+node_modules
+.bun-cache
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Environment files (if any sensitive ones exist)
+.env.local
+.env*.local
+
