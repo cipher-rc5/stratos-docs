@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { MermaidDiagram } from "@/components/mermaid-diagram"
 
 export default function DocsPage() {
   return (
@@ -290,6 +291,50 @@ export default function DocsPage() {
                 standards to ensure maximum interoperability.
               </p>
 
+              <MermaidDiagram
+                id="architecture-diagram"
+                chart={`
+graph TB
+    subgraph "Agent Layer"
+        A[AI Agent]
+    end
+    
+    subgraph "Interface Layer"
+        B[Model Context Protocol<br/>MCP Endpoints]
+    end
+    
+    subgraph "Transport Layer"
+        C[WebTransport HTTP/3<br/>Bidirectional Streaming]
+    end
+    
+    subgraph "Settlement Layer"
+        D[x402 Payment Protocol<br/>USDC/ETH]
+    end
+    
+    subgraph "Data Layer"
+        E[Avalanche Network<br/>Performance Logging & Telemetry]
+    end
+    
+    subgraph "Creator Layer"
+        F[Strategy Creator<br/>Quant Developer]
+    end
+    
+    A -->|Discovers & Consumes| B
+    B -->|Streams Signals| C
+    C -->|Validates Payment| D
+    D -->|Logs Performance| E
+    F -->|Publishes Strategy| B
+    E -->|Verifies History| B
+    
+    style A fill:#dcee24,stroke:#141414,stroke-width:3px,color:#141414
+    style F fill:#dcee24,stroke:#141414,stroke-width:3px,color:#141414
+    style B fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
+    style C fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
+    style D fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
+    style E fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
+                `}
+              />
+
               <div className="border border-[#dbd8d0] overflow-hidden mb-6">
                 <table className="w-full">
                   <thead className="bg-[#e8e5de]">
@@ -356,6 +401,34 @@ export default function DocsPage() {
             <section id="user-journey" className="scroll-mt-8 mb-16">
               <h2 className="text-3xl font-bold text-[#141414] mt-16 mb-6">User Journey (The "Happy Path")</h2>
 
+              <MermaidDiagram
+                id="user-journey-diagram"
+                chart={`
+sequenceDiagram
+    participant C as Elena (Creator)
+    participant S as Stratos Platform
+    participant A as Avalanche Data-Chain
+    participant AG as Agent-007
+    participant M as Market
+
+    Note over C,M: Strategy Publication Flow
+    C->>S: stratos publish ./strategy.py
+    S->>S: Validate & Wrap in MCP
+    S->>A: Deploy Liveness Monitor
+    S-->>C: Endpoint: api.stratos.markets/elena/arb-v1
+    
+    Note over C,M: Agent Discovery & Execution Flow
+    AG->>S: Connect via WebTransport
+    S-->>AG: 402 Payment Required: 0.05 USDC
+    AG->>S: Sign Micro-Transaction
+    S->>A: Log Transaction
+    S-->>AG: Stream Live Signal
+    AG->>M: Execute Trade On-Chain
+    M-->>AG: Trade Confirmed
+    AG->>A: Log Performance
+                `}
+              />
+
               <div className="space-y-6">
                 <div className="border-l-4 border-[#dcee24] pl-6 py-2">
                   <h3 className="text-xl font-bold text-[#141414] mb-2">Step 1: The Publish (Supply)</h3>
@@ -402,9 +475,34 @@ export default function DocsPage() {
               <h2 className="text-3xl font-bold text-[#141414] mt-16 mb-6">Technical Roadmap</h2>
               <p className="text-lg font-semibold text-[#141414] mb-6">Engineering the Standards</p>
 
+              <MermaidDiagram
+                id="technical-roadmap-diagram"
+                chart={`
+gantt
+    title Technical Development Timeline
+    dateFormat YYYY-MM
+    axisFormat %b %Y
+    
+    section Phase 1: Core Rails
+    x402 Settlement Logic           :a1, 2025-07, 2025-09
+    WebTransport Gateway Nodes      :a2, 2025-07, 2025-09
+    Stratos CLI Release             :a3, 2025-08, 2025-09
+    
+    section Phase 2: Standardization
+    MCP Server Implementation       :b1, 2025-10, 2025-12
+    Avalanche Integration           :b2, 2025-10, 2025-12
+    Security Assessment             :b3, 2025-11, 2025-12
+    
+    section Phase 3: Optimization
+    Global Edge Distribution        :c1, 2026-01, 2026-03
+    Strategy Chaining Engine        :c2, 2026-01, 2026-03
+    Stratos Validator Release       :c3, 2026-02, 2026-03
+                `}
+              />
+
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-xl font-bold text-[#141414] mb-3">Phase 1: The Core Rails (Q3 2025)</h3>
+                  <h3 className="text-xl font-bold text-[#141414] mb-3">Phase 1: Core Rails (Q3 2025)</h3>
                   <ul className="space-y-2 list-disc list-inside text-[#454545]">
                     <li>Implement x402 settlement logic for EVM-compatible payments.</li>
                     <li>Deploy WebTransport gateway nodes.</li>
@@ -413,7 +511,7 @@ export default function DocsPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-[#141414] mb-3">Phase 2: The Standardization (Q4 2025)</h3>
+                  <h3 className="text-xl font-bold text-[#141414] mb-3">Phase 2: Standardization (Q4 2025)</h3>
                   <ul className="space-y-2 list-disc list-inside text-[#454545]">
                     <li>Full implementation of Model Context Protocol (MCP) server-side.</li>
                     <li>
@@ -425,7 +523,7 @@ export default function DocsPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-[#141414] mb-3">Phase 3: The Optimization (Q1 2026)</h3>
+                  <h3 className="text-xl font-bold text-[#141414] mb-3">Phase 3: Optimization (Q1 2026)</h3>
                   <ul className="space-y-2 list-disc list-inside text-[#454545]">
                     <li>Latency reduction (Global edge distribution).</li>
                     <li>Support for strategy chaining (Composability engine).</li>
@@ -439,6 +537,36 @@ export default function DocsPage() {
             <section id="executional-roadmap" className="scroll-mt-8 mb-16">
               <h2 className="text-3xl font-bold text-[#141414] mt-16 mb-6">Executional Roadmap</h2>
               <p className="text-lg font-semibold text-[#141414] mb-6">Business & Growth</p>
+
+              <MermaidDiagram
+                id="executional-roadmap-diagram"
+                chart={`
+graph LR
+    A[Phase 1: Experimental Alpha<br/>Testnet Only] --> B[Phase 2: Public Beta<br/>Permissionless Mainnet]
+    B --> C[Phase 3: Mainnet Scale<br/>Enterprise & Cross-Chain]
+    
+    A1[Base Sepolia<br/>Avalanche Fuji] -.->|Testnet| A
+    A2[50 Quant Devs<br/>Stress Testing] -.-> A
+    
+    B1[Registry Launch] -.->|Production| B
+    B2[500 Strategies<br/>10K Daily Executions] -.-> B
+    
+    C1[Cross-Chain Settlement] -.->|Growth| C
+    C2[Enterprise API] -.-> C
+    C3[Top 5 Institutional Funds] -.-> C
+    
+    style A fill:#e8e5de,stroke:#141414,stroke-width:3px,color:#141414
+    style B fill:#dcee24,stroke:#141414,stroke-width:3px,color:#141414
+    style C fill:#dcee24,stroke:#141414,stroke-width:3px,color:#141414
+    style A1 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+    style A2 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+    style B1 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+    style B2 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+    style C1 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+    style C2 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+    style C3 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+                `}
+              />
 
               <div className="space-y-8">
                 <div>
@@ -496,6 +624,41 @@ export default function DocsPage() {
                 We are not building plugins for specific agent frameworks. We are building the <em>standard</em> that
                 all frameworks will naturally adopt.
               </p>
+
+              <MermaidDiagram
+                id="gtm-strategy-diagram"
+                chart={`
+graph TD
+    A[Stratos Platform] --> B[Supply Seeding]
+    A --> C[Demand Generation]
+    A --> D[Composability Flywheel]
+    
+    B --> B1[Target Signal Providers<br/>Discord/Telegram]
+    B --> B2[Offer 0% Fees<br/>First 6 Months]
+    B1 --> E[Creator Onboarding]
+    B2 --> E
+    
+    C --> C1[MCP Documentation<br/>& SDKs]
+    C --> C2[Reference Implementations<br/>Python/TypeScript]
+    C1 --> F[Agent Developer Adoption]
+    C2 --> F
+    
+    D --> D1[Primitive Strategies<br/>Building Blocks]
+    D --> D2[Strategy Composition<br/>Dependencies]
+    D1 --> G[Network Effects]
+    D2 --> G
+    
+    E --> H[Marketplace Growth]
+    F --> H
+    G --> H
+    
+    style A fill:#dcee24,stroke:#141414,stroke-width:4px,color:#141414
+    style B fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
+    style C fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
+    style D fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
+    style H fill:#dcee24,stroke:#141414,stroke-width:3px,color:#141414
+                `}
+              />
 
               <div className="space-y-8">
                 <div>
