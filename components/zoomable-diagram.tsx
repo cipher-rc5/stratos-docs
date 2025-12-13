@@ -5,7 +5,7 @@ import mermaid from 'mermaid';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-interface ZoomableDiagramProps {
+export interface ZoomableDiagramProps {
   chart: string;
   id: string;
   minScale?: number;
@@ -21,53 +21,74 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'base',
-      themeVariables: {
-        primaryColor: '#dcee24',
-        primaryTextColor: '#141414',
-        primaryBorderColor: '#141414',
-        lineColor: '#141414',
-        secondaryColor: '#f2efe9',
-        tertiaryColor: '#e8e5de',
-        background: '#f2efe9',
-        mainBkg: '#f2efe9',
-        secondBkg: '#e8e5de',
-        textColor: '#141414',
-        border1: '#141414',
-        border2: '#454545',
-        noteBkgColor: '#dcee24',
-        noteTextColor: '#141414',
-        noteBorderColor: '#141414',
-        clusterBkg: '#e8e5de',
-        clusterBorder: '#141414',
-        defaultLinkColor: '#141414',
-        titleColor: '#141414',
-        edgeLabelBackground: '#f2efe9',
-        nodeTextColor: '#141414',
-        fontSize: '16px'
-      },
-      flowchart: { htmlLabels: true, curve: 'linear', padding: 30, nodeSpacing: 80, rankSpacing: 80 },
-      gantt: {
-        titleTopMargin: 35,
-        barHeight: 50,
-        barGap: 12,
-        topPadding: 75,
-        leftPadding: 120,
-        gridLineStartPadding: 50,
-        fontSize: 14,
-        sectionFontSize: 16
-      }
-    });
+    const renderDiagram = async () => {
+      setLoading(true);
+      try {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'base',
+          themeVariables: {
+            primaryColor: '#dcee24',
+            primaryTextColor: '#141414',
+            primaryBorderColor: '#141414',
+            lineColor: '#141414',
+            secondaryColor: '#f2efe9',
+            tertiaryColor: '#e8e5de',
+            background: '#f2efe9',
+            mainBkg: '#f2efe9',
+            secondBkg: '#e8e5de',
+            textColor: '#141414',
+            border1: '#141414',
+            border2: '#454545',
+            noteBkgColor: '#dcee24',
+            noteTextColor: '#141414',
+            noteBorderColor: '#141414',
+            clusterBkg: '#e8e5de',
+            clusterBorder: '#141414',
+            defaultLinkColor: '#141414',
+            titleColor: '#141414',
+            edgeLabelBackground: '#f2efe9',
+            nodeTextColor: '#141414',
+            fontSize: '16px'
+          },
+          flowchart: { htmlLabels: true, curve: 'linear', padding: 30, nodeSpacing: 80, rankSpacing: 80 },
+          gantt: {
+            titleTopMargin: 35,
+            barHeight: 50,
+            barGap: 12,
+            topPadding: 75,
+            leftPadding: 120,
+            gridLineStartPadding: 50,
+            fontSize: 14,
+            sectionFontSize: 16
+          }
+        });
 
-    if (contentRef.current) {
-      contentRef.current.innerHTML = chart;
-      mermaid.contentLoaded();
-    }
-  }, [chart]);
+        const uniqueId = `mermaid-${id}-${Math.random().toString(36).slice(2, 9)}`;
+        const { svg } = await mermaid.render(uniqueId, chart);
+
+        if (contentRef.current) {
+          contentRef.current.innerHTML = svg;
+          const svgEl = contentRef.current.querySelector('svg');
+          if (svgEl) {
+            svgEl.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+            svgEl.style.width = '100%';
+            svgEl.style.height = 'auto';
+            svgEl.style.maxWidth = '100%';
+          }
+        }
+      } catch (err) {
+        console.error('Mermaid render failed', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    renderDiagram();
+  }, [chart, id]);
 
   const fitDiagramToContainer = useCallback(() => {
     const container = containerRef.current;
@@ -75,7 +96,6 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
     if (!container || !svg) return;
 
     const bbox = svg.getBBox();
-    // Ensure the SVG stretches to the available width
     svg.setAttribute('viewBox', `0 0 ${bbox.width} ${bbox.height}`);
     svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
     svg.style.width = '100%';
@@ -83,19 +103,23 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
     svg.style.maxWidth = '100%';
 
     const availableWidth = container.clientWidth;
-    if (!availableWidth) return;
+    const availableHeight = container.clientHeight;
+    if (!availableWidth || !availableHeight) return;
 
-    const paddingBuffer = 24; // small buffer so controls/instructions don't force overflow
-    const computedScale = Math.max(minScale, (availableWidth - paddingBuffer) / bbox.width);
-    // Allow auto-fit to exceed the manual maxScale so the diagram can fill wide viewports.
+    const paddingBuffer = 24; // buffer so controls/instructions don't force overflow
+    const widthScale = (availableWidth - paddingBuffer) / bbox.width;
+    const heightScale = (availableHeight - paddingBuffer) / bbox.height;
+    const computedScale = Math.max(minScale, Math.min(widthScale, heightScale, maxScale));
+
     setScale(computedScale);
     setPosition({ x: 0, y: 0 });
-  }, [minScale]);
+  }, [maxScale, minScale]);
 
   useEffect(() => {
-    // Fit once after chart renders
-    fitDiagramToContainer();
-  }, [fitDiagramToContainer, chart]);
+    if (!loading) {
+      fitDiagramToContainer();
+    }
+  }, [fitDiagramToContainer, loading]);
 
   useEffect(() => {
     // Re-fit on container resize unless the user has manually adjusted zoom/pan
