@@ -1,10 +1,8 @@
 'use client';
-
-import type React from 'react';
-
 import { Button } from '@/components/ui/button';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut } from 'lucide-react';
 import mermaid from 'mermaid';
+import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 interface ZoomableDiagramProps {
@@ -147,7 +145,7 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
       {/* Diagram Container */}
       <div
         ref={containerRef}
-        className={`overflow-hidden ${isFullscreen ? 'h-screen w-screen' : 'h-[800px] w-full'}`}
+        className={`overflow-hidden ${isFullscreen ? 'h-screen w-screen' : 'h-200 w-full'}`}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
