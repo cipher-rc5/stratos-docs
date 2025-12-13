@@ -36,7 +36,7 @@ Stratos facilitates a composable creator economy where trading strategies are tr
 ## Developer Resources
 
 - **Interactive Docs**: Full OpenAPI specifications powered by Scalar.
-- **Endpoint**: https://stratos-markets-api.vercel.app/docs`,
+- **Endpoint**: https://stratos-markets-api.vercel.app/docs`
     },
     servers: [{ url: 'https://stratos-markets-api.vercel.app/v1', description: 'Production server' }],
     paths: {
