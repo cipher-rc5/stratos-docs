@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut } from 'lucide-react';
 import mermaid from 'mermaid';
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface ZoomableDiagramProps {
   chart: string;
@@ -20,6 +20,7 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     mermaid.initialize({
@@ -68,21 +69,68 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
     }
   }, [chart]);
 
+  const fitDiagramToContainer = useCallback(() => {
+    const container = containerRef.current;
+    const svg = contentRef.current?.querySelector('svg');
+    if (!container || !svg) return;
+
+    const bbox = svg.getBBox();
+    // Ensure the SVG stretches to the available width
+    svg.setAttribute('viewBox', `0 0 ${bbox.width} ${bbox.height}`);
+    svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.maxWidth = '100%';
+
+    const availableWidth = container.clientWidth;
+    if (!availableWidth) return;
+
+    const paddingBuffer = 24; // small buffer so controls/instructions don't force overflow
+    const computedScale = Math.max(minScale, (availableWidth - paddingBuffer) / bbox.width);
+    // Allow auto-fit to exceed the manual maxScale so the diagram can fill wide viewports.
+    setScale(computedScale);
+    setPosition({ x: 0, y: 0 });
+  }, [minScale]);
+
+  useEffect(() => {
+    // Fit once after chart renders
+    fitDiagramToContainer();
+  }, [fitDiagramToContainer, chart]);
+
+  useEffect(() => {
+    // Re-fit on container resize unless the user has manually adjusted zoom/pan
+    const observer = new ResizeObserver(() => {
+      if (!hasInteracted) {
+        fitDiagramToContainer();
+      }
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [fitDiagramToContainer, hasInteracted]);
+
   const handleZoomIn = () => {
     setScale((prev) => Math.min(prev + 0.3, maxScale));
+    setHasInteracted(true);
   };
 
   const handleZoomOut = () => {
     setScale((prev) => Math.max(prev - 0.3, minScale));
+    setHasInteracted(true);
   };
 
   const handleReset = () => {
-    setScale(1.2);
-    setPosition({ x: 0, y: 0 });
+    setHasInteracted(false);
+    fitDiagramToContainer();
   };
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
+    // Refitting once fullscreen is applied helps avoid initial clipping
+    setTimeout(() => fitDiagramToContainer(), 50);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -93,6 +141,7 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
     setPosition({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+    setHasInteracted(true);
   };
 
   const handleMouseUp = () => {
@@ -103,6 +152,7 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
     e.preventDefault();
     const delta = e.deltaY * -0.001;
     setScale((prev) => Math.max(minScale, Math.min(maxScale, prev + delta)));
+    setHasInteracted(true);
   };
 
   return (
@@ -145,7 +195,7 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
       {/* Diagram Container */}
       <div
         ref={containerRef}
-        className={`overflow-hidden ${isFullscreen ? 'h-screen w-screen' : 'h-200 w-full'}`}
+        className={`overflow-hidden ${isFullscreen ? 'h-screen w-screen' : 'w-full min-h-105 max-h-[80vh]'}`}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -155,10 +205,10 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
         <div
           ref={contentRef}
           id={id}
-          className='mermaid flex items-center justify-center p-8 transition-transform duration-200'
+          className='mermaid flex items-center justify-center p-6 transition-transform duration-200'
           style={{
             transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
-            transformOrigin: 'center',
+            transformOrigin: 'top left',
             minWidth: '100%',
             minHeight: '100%'
           }} />

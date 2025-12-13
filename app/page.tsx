@@ -124,14 +124,14 @@ export default function HomePage() {
                 <span className='text-[#dcee24] font-bold text-xl'>•</span>
                 <div>
                   <span className='font-bold text-[#f2efe9]'>Live Execution:</span>
-                  <span className='text-[#a1a1a1]'>Instant broadcast of strategy signals and execution updates.</span>
+                  <span className='text-[#a1a1a1]'>{' '}Instant broadcast of strategy signals and execution updates.</span>
                 </div>
               </li>
               <li className='flex items-start gap-3'>
                 <span className='text-[#dcee24] font-bold text-xl'>•</span>
                 <div>
                   <span className='font-bold text-[#f2efe9]'>Telemetry:</span>
-                  <span className='text-[#a1a1a1]'>Real-time market data feeds and performance metric streaming.</span>
+                  <span className='text-[#a1a1a1]'>{' '}Real-time market data feeds and performance metric streaming.</span>
                 </div>
               </li>
             </ul>

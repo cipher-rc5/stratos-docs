@@ -411,8 +411,8 @@ sequenceDiagram
               {/* Diagram for Technical Roadmap */}
               <ZoomableDiagram
                 id='technical-roadmap-diagram'
-                minScale={0.5}
-                maxScale={3}
+                minScale={0.6}
+                maxScale={12}
                 chart={`
 gantt
     title Technical Development Timeline
