@@ -3,9 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Maximize2, Minimize2, ZoomIn, ZoomOut } from 'lucide-react';
 import mermaid from 'mermaid';
 import type React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export interface ZoomableDiagramProps {
+interface ZoomableDiagramProps {
   chart: string;
   id: string;
   minScale?: number;
@@ -20,141 +20,69 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const renderDiagram = async () => {
-      setLoading(true);
-      try {
-        mermaid.initialize({
-          startOnLoad: false,
-          theme: 'base',
-          themeVariables: {
-            primaryColor: '#dcee24',
-            primaryTextColor: '#141414',
-            primaryBorderColor: '#141414',
-            lineColor: '#141414',
-            secondaryColor: '#f2efe9',
-            tertiaryColor: '#e8e5de',
-            background: '#f2efe9',
-            mainBkg: '#f2efe9',
-            secondBkg: '#e8e5de',
-            textColor: '#141414',
-            border1: '#141414',
-            border2: '#454545',
-            noteBkgColor: '#dcee24',
-            noteTextColor: '#141414',
-            noteBorderColor: '#141414',
-            clusterBkg: '#e8e5de',
-            clusterBorder: '#141414',
-            defaultLinkColor: '#141414',
-            titleColor: '#141414',
-            edgeLabelBackground: '#f2efe9',
-            nodeTextColor: '#141414',
-            fontSize: '16px'
-          },
-          flowchart: { htmlLabels: true, curve: 'linear', padding: 30, nodeSpacing: 80, rankSpacing: 80 },
-          gantt: {
-            titleTopMargin: 35,
-            barHeight: 50,
-            barGap: 12,
-            topPadding: 75,
-            leftPadding: 120,
-            gridLineStartPadding: 50,
-            fontSize: 14,
-            sectionFontSize: 16
-          }
-        });
-
-        const uniqueId = `mermaid-${id}-${Math.random().toString(36).slice(2, 9)}`;
-        const { svg } = await mermaid.render(uniqueId, chart);
-
-        if (contentRef.current) {
-          contentRef.current.innerHTML = svg;
-          const svgEl = contentRef.current.querySelector('svg');
-          if (svgEl) {
-            svgEl.setAttribute('preserveAspectRatio', 'xMinYMin meet');
-            svgEl.style.width = '100%';
-            svgEl.style.height = 'auto';
-            svgEl.style.maxWidth = '100%';
-          }
-        }
-      } catch (err) {
-        console.error('Mermaid render failed', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    renderDiagram();
-  }, [chart, id]);
-
-  const fitDiagramToContainer = useCallback(() => {
-    const container = containerRef.current;
-    const svg = contentRef.current?.querySelector('svg');
-    if (!container || !svg) return;
-
-    const bbox = svg.getBBox();
-    svg.setAttribute('viewBox', `0 0 ${bbox.width} ${bbox.height}`);
-    svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
-    svg.style.width = '100%';
-    svg.style.height = 'auto';
-    svg.style.maxWidth = '100%';
-
-    const availableWidth = container.clientWidth;
-    const availableHeight = container.clientHeight;
-    if (!availableWidth || !availableHeight) return;
-
-    const paddingBuffer = 24; // buffer so controls/instructions don't force overflow
-    const widthScale = (availableWidth - paddingBuffer) / bbox.width;
-    const heightScale = (availableHeight - paddingBuffer) / bbox.height;
-    const computedScale = Math.max(minScale, Math.min(widthScale, heightScale, maxScale));
-
-    setScale(computedScale);
-    setPosition({ x: 0, y: 0 });
-  }, [maxScale, minScale]);
-
-  useEffect(() => {
-    if (!loading) {
-      fitDiagramToContainer();
-    }
-  }, [fitDiagramToContainer, loading]);
-
-  useEffect(() => {
-    // Re-fit on container resize unless the user has manually adjusted zoom/pan
-    const observer = new ResizeObserver(() => {
-      if (!hasInteracted) {
-        fitDiagramToContainer();
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#dcee24',
+        primaryTextColor: '#141414',
+        primaryBorderColor: '#141414',
+        lineColor: '#141414',
+        secondaryColor: '#f2efe9',
+        tertiaryColor: '#e8e5de',
+        background: '#f2efe9',
+        mainBkg: '#f2efe9',
+        secondBkg: '#e8e5de',
+        textColor: '#141414',
+        border1: '#141414',
+        border2: '#454545',
+        noteBkgColor: '#dcee24',
+        noteTextColor: '#141414',
+        noteBorderColor: '#141414',
+        clusterBkg: '#e8e5de',
+        clusterBorder: '#141414',
+        defaultLinkColor: '#141414',
+        titleColor: '#141414',
+        edgeLabelBackground: '#f2efe9',
+        nodeTextColor: '#141414',
+        fontSize: '16px'
+      },
+      flowchart: { htmlLabels: true, curve: 'linear', padding: 30, nodeSpacing: 80, rankSpacing: 80 },
+      gantt: {
+        titleTopMargin: 35,
+        barHeight: 50,
+        barGap: 12,
+        topPadding: 75,
+        leftPadding: 120,
+        gridLineStartPadding: 50,
+        fontSize: 14,
+        sectionFontSize: 16
       }
     });
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    if (contentRef.current) {
+      contentRef.current.innerHTML = chart;
+      mermaid.contentLoaded();
     }
-
-    return () => observer.disconnect();
-  }, [fitDiagramToContainer, hasInteracted]);
+  }, [chart]);
 
   const handleZoomIn = () => {
     setScale((prev) => Math.min(prev + 0.3, maxScale));
-    setHasInteracted(true);
   };
 
   const handleZoomOut = () => {
     setScale((prev) => Math.max(prev - 0.3, minScale));
-    setHasInteracted(true);
   };
 
   const handleReset = () => {
-    setHasInteracted(false);
-    fitDiagramToContainer();
+    setScale(1.2);
+    setPosition({ x: 0, y: 0 });
   };
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
-    // Refitting once fullscreen is applied helps avoid initial clipping
-    setTimeout(() => fitDiagramToContainer(), 50);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -165,7 +93,6 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
     setPosition({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
-    setHasInteracted(true);
   };
 
   const handleMouseUp = () => {
@@ -176,7 +103,6 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
     e.preventDefault();
     const delta = e.deltaY * -0.001;
     setScale((prev) => Math.max(minScale, Math.min(maxScale, prev + delta)));
-    setHasInteracted(true);
   };
 
   return (
@@ -219,7 +145,7 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
       {/* Diagram Container */}
       <div
         ref={containerRef}
-        className={`overflow-hidden ${isFullscreen ? 'h-screen w-screen' : 'w-full min-h-105 max-h-[80vh]'}`}
+        className={`overflow-hidden ${isFullscreen ? 'h-screen w-screen' : 'h-200 w-full'}`}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -229,10 +155,10 @@ export function ZoomableDiagram({ chart, id, minScale = 0.3, maxScale = 5 }: Zoo
         <div
           ref={contentRef}
           id={id}
-          className='mermaid flex items-center justify-center p-6 transition-transform duration-200'
+          className='mermaid flex items-center justify-center p-8 transition-transform duration-200'
           style={{
             transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
-            transformOrigin: 'top left',
+            transformOrigin: 'center',
             minWidth: '100%',
             minHeight: '100%'
           }} />
