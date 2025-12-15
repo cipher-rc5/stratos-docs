@@ -308,3 +308,13 @@
 .font-tektur {
   font-family: "Tektur", var(--font-geist-sans), sans-serif;
 }
+
+/* Hide scrollbars but keep scrolling functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
