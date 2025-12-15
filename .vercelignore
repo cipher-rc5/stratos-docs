@@ -28,3 +28,6 @@ node_modules
 # Environment files (if any sensitive ones exist)
 .env.local
 .env*.local
+
+# Next.js build output should never be uploaded
+.next
