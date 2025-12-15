@@ -479,21 +479,40 @@ gantt
                 minScale={0.5}
                 maxScale={3}
                 chart={`
-graph LR
-    A[Phase 1: Experimental Alpha<br/>Testnet Only] --> B[Phase 2: Public Beta<br/>Permissionless Mainnet]
-    B --> C[Phase 3: Mainnet Scale<br/>Enterprise & Cross-Chain]
+flowchart TB
+    subgraph testnet [" "]
+        A1[Base Sepolia<br/>Avalanche Fuji]
+        A2[50 Quant Devs<br/>Stress Testing]
+    end
+    
+    A[Phase 1: Experimental Alpha<br/>Testnet Only]
+    
+    subgraph production [" "]
+        B1[Registry Launch]
+        B2[500 Strategies<br/>10K Daily Executions]
+    end
+    
+    B[Phase 2: Public Beta<br/>Permissionless Mainnet]
+    
+    subgraph growth [" "]
+        C1[Cross-Chain Settlement]
+        C2[Enterprise API]
+        C3[Top 5 Institutional Funds]
+    end
+    
+    C[Phase 3: Mainnet Scale<br/>Enterprise & Cross-Chain]
+    
+    A1 -.->|Testnet| A
+    A2 -.-> A
+    A -->|Production| B
+    B1 -.-> B
+    B2 -.-> B
+    B -->|Growth| C
+    C1 -.-> C
+    C2 -.-> C
+    C3 -.-> C
 
-    A1[Base Sepolia<br/>Avalanche Fuji] -.->|Testnet| A
-    A2[50 Quant Devs<br/>Stress Testing] -.-> A
-
-    B1[Registry Launch] -.->|Production| B
-    B2[500 Strategies<br/>10K Daily Executions] -.-> B
-
-    C1[Cross-Chain Settlement] -.->|Growth| C
-    C2[Enterprise API] -.-> C
-    C3[Top 5 Institutional Funds] -.-> C
-
-    style A fill:#e8e5de,stroke:#141414,stroke-width:3px,color:#141414
+    style A fill:#e8e5de,stroke:#141414,stroke-width:2px,color:#141414
     style B fill:#dcee24,stroke:#141414,stroke-width:3px,color:#141414
     style C fill:#dcee24,stroke:#141414,stroke-width:3px,color:#141414
     style A1 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
@@ -503,6 +522,9 @@ graph LR
     style C1 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
     style C2 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
     style C3 fill:#f2efe9,stroke:#141414,stroke-width:1px,color:#454545
+    style testnet fill:transparent,stroke:none
+    style production fill:transparent,stroke:none
+    style growth fill:transparent,stroke:none
                 `} />
 
               <div className='space-y-8'>
