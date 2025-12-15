@@ -2,8 +2,8 @@
 const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   images: { unoptimized: false },
-  turbopack: {},
-  experimental: { turbo: { rules: { '**/_dev/**': { loaders: [], as: '*.js' } } } }
+  // Keep Turbopack from doing work in our local-only _dev scratchpad.
+  turbopack: { rules: { '**/_dev/**': { loaders: [], as: '*.js' } } }
 };
 
 export default nextConfig;

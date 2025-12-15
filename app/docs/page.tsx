@@ -170,7 +170,7 @@ export default function DocsPage() {
                 <ul className='space-y-3 list-disc list-inside'>
                   <li className='text-[#454545]'>
                     <strong className='text-[#141414]'>Fragmentation:</strong>{' '}
-                    Brilliant strategies are locked in Discord servers, Python scripts, and private Telegram chats.
+                    Brilliant strategies are locked in private servers(discord, telegragm), forums, and quant shops.
                   </li>
                   <li className='text-[#454545]'>
                     <strong className='text-[#141414]'>Monetization Friction:</strong>{' '}
@@ -437,7 +437,7 @@ gantt
 
               <div className='space-y-8'>
                 <div>
-                  <h3 className='text-xl font-bold text-[#141414] mb-3'>Phase 1: Core Rails (Q3 2025)</h3>
+                  <h3 className='text-xl font-bold text-[#141414] mb-3'>Phase 1: Core Rails (Q1 2026)</h3>
                   <ul className='space-y-2 list-disc list-inside text-[#454545]'>
                     <li>Implement x402 settlement logic for EVM-compatible payments.</li>
                     <li>Deploy WebTransport gateway nodes.</li>
@@ -446,7 +446,7 @@ gantt
                 </div>
 
                 <div>
-                  <h3 className='text-xl font-bold text-[#141414] mb-3'>Phase 2: Standardization (Q4 2025)</h3>
+                  <h3 className='text-xl font-bold text-[#141414] mb-3'>Phase 2: Standardization (Q2 2026)</h3>
                   <ul className='space-y-2 list-disc list-inside text-[#454545]'>
                     <li>Full implementation of Model Context Protocol (MCP) server-side.</li>
                     <li>
@@ -458,7 +458,7 @@ gantt
                 </div>
 
                 <div>
-                  <h3 className='text-xl font-bold text-[#141414] mb-3'>Phase 3: Optimization (Q1 2026)</h3>
+                  <h3 className='text-xl font-bold text-[#141414] mb-3'>Phase 3: Optimization (Q3 2026)</h3>
                   <ul className='space-y-2 list-disc list-inside text-[#454545]'>
                     <li>Latency reduction (Global edge distribution).</li>
                     <li>Support for strategy chaining (Composability engine).</li>
