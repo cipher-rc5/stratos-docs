@@ -1,30 +1,35 @@
 # Untitled Chat
 
-_Automatically synced with your [v0.app](https://v0.app) deployments_
+This repo is the source for our v0.app chat project, deployed on Vercel and run exclusively with the Bun runtime and Bun package manager.
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/zerocreativity-systems/v0-untitled-chat-31)
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/r5gys55SHsK)
 
 ## Overview
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+- Codebase runs on Bun only; use Bun for the runtime and dependency management.
+- Changes pushed from the v0.app UI sync automatically into this repository.
+- Vercel builds and deploys directly from this repo using Bun.
+
+## Getting Started (Bun)
+
+```bash
+bun install
+bun dev
+```
 
 ## Deployment
 
-Your project is live at:
+Live app on Vercel:
 
-**[https://vercel.com/zerocreativity-systems/v0-untitled-chat-31](https://vercel.com/zerocreativity-systems/v0-untitled-chat-31)**
+- https://vercel.com/zerocreativity-systems/v0-untitled-chat-31
 
-## Build your app
+## Build in v0.app
 
-Continue building your app on:
-
-**[https://v0.app/chat/r5gys55SHsK](https://v0.app/chat/r5gys55SHsK)**
+- https://v0.app/chat/r5gys55SHsK
 
 ## How It Works
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+1. Build and modify the chat in [v0.app](https://v0.app).
+2. Deploy from the v0 interface; changes sync into this repo.
+3. Vercel deploys the latest commit using Bun.

@@ -14,7 +14,7 @@ export default function HomePage() {
             <Link href='/docs' className='text-sm font-medium hover:text-[#dcee24] transition-colors'>Documentation</Link>
             <Link href='/api/reference' className='text-sm font-medium hover:text-[#dcee24] transition-colors'>API Reference</Link>
             <a
-              href='https://stratos-markets-api.vercel.app'
+              href='https://stratos-markets-ui.vercel.app/'
               target='_blank'
               rel='noopener noreferrer'
               className='rounded-none bg-[#dcee24] px-4 py-2 text-sm font-bold text-[#141414] hover:bg-[#c9db1f] transition-colors'>
@@ -31,7 +31,7 @@ export default function HomePage() {
           <p className='text-xl text-[#a1a1a1] mb-8 leading-relaxed'>
             Decentralized marketplace infrastructure for the creation, discovery, and monetization of DeFi intelligence.
           </p>
-          <p className='text-lg text-[#a1a1a1] mb-12 leading-relaxed'>
+          <p className='text-xl text-[#a1a1a1] mb-12 leading-relaxed'>
             Stratos facilitates a composable creator economy where trading strategies are treated as monetizeable data products. Strategy
             creators can publish, version, and fork sophisticated DeFi logic, while users and AI agents discover and consume these
             strategies via the X402 protocol.
