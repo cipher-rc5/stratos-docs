@@ -12,6 +12,12 @@ let mermaid_initialized = false;
 export function MermaidDiagram({ chart, id }: MermaidDiagramProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [is_rendering, set_is_rendering] = useState(false);
+  const [has_centered, set_has_centered] = useState(false);
+
+  // Reset centering when chart changes
+  useEffect(() => {
+    set_has_centered(false);
+  }, [chart]);
 
   useEffect(() => {
     if (!mermaid_initialized) {
@@ -132,6 +138,31 @@ export function MermaidDiagram({ chart, id }: MermaidDiagramProps) {
           svg_element.style.height = 'auto';
           svg_element.style.maxWidth = '100%';
           svg_element.style.display = 'block';
+          svg_element.style.margin = '0 auto';
+          
+          // Center the SVG content within its container
+          if (!has_centered && ref.current) {
+            try {
+              const bbox = svg_element.getBBox();
+              const container_rect = ref.current.getBoundingClientRect();
+              
+              // Calculate centering offsets
+              const svg_width = bbox.width + bbox.x * 2;
+              const svg_height = bbox.height + bbox.y * 2;
+              
+              // If SVG is smaller than container, center it
+              if (svg_width < container_rect.width) {
+                const offset_x = (container_rect.width - svg_width) / 2;
+                svg_element.style.marginLeft = `${offset_x}px`;
+                svg_element.style.marginRight = `${offset_x}px`;
+              }
+              
+              set_has_centered(true);
+            } catch (bbox_error) {
+              // getBBox might fail on some diagrams, silently continue
+              console.debug('Could not calculate bbox for centering:', bbox_error);
+            }
+          }
         }
       } catch (error) {
         console.error('Failed to render Mermaid diagram:', error);
@@ -157,6 +188,7 @@ export function MermaidDiagram({ chart, id }: MermaidDiagramProps) {
     <div
       ref={ref}
       id={id}
-      className='mermaid my-8 flex items-center justify-center bg-[#f2efe9] p-8 border border-[#dbd8d0] overflow-x-auto' />
+      className='mermaid my-8 flex items-center justify-center bg-[#f2efe9] p-8 border border-[#dbd8d0] overflow-x-auto'
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
   );
 }
